@@ -7,7 +7,7 @@ void passByVal(int val){
 }
 
 void passByRef(int& ref){
-	red = 10;
+	ref = 10;
 	cout << ref << endl;
 }
 
