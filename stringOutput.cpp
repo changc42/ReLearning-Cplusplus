@@ -8,3 +8,4 @@ int main()
     cout << yourMom << endl;
     return 0;
 }
+35
