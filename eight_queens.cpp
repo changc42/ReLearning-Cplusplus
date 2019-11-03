@@ -1,6 +1,13 @@
+/*
+how many ways are there to put 8 queens on a chess board such that none of the queens can eat
+each other in one move?
+print out all the solutions
+*/
+
 #include<iostream>
 using namespace std;
 
+//determines if a coordinate is in another queens attacking range
 bool has_queens(int b[][8], int r, int c){
 	for(int i=0; c-i>=0; i++){
 		if(b[r][c-i]==1){
@@ -24,10 +31,15 @@ bool has_queens(int b[][8], int r, int c){
 	return false;
 }
 
+/*removes the last placed queen and checks if the spaces below the coordinate where the queen was removed
+are valid for placement. if there is a space, place a queen. if not, call back track again.
+if c==1 and there is a queen at (7,0), this function will do nothing.
+*/
 void backtrack(int b[][8], int solutions[8], int &r, int &c)
 {
 	if(c==1 && solutions[0]==7){
 		cout << "Cannot backtrack anymore" << endl;
+		return;
 	}
 	
 	c--;
