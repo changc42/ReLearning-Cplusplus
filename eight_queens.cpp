@@ -38,7 +38,7 @@ if c==1 and there is a queen at (7,0), this function will do nothing.
 void backtrack(int b[][8], int solutions[8], int &r, int &c)
 {
 	if(c==1 && solutions[0]==7){
-		cout << "Cannot backtrack anymore" << endl;
+		cout << "Cannot backtrack anymore" << r << ", " << c << endl;
 		return;
 	}
 	
@@ -51,6 +51,12 @@ void backtrack(int b[][8], int solutions[8], int &r, int &c)
 	solutions[c]=r;
 	} else
 	backtrack(b,solutions,r,c);
+}
+
+bool can_backtrack(int solutions[8],int c){
+	if(c==1 && solutions[0]==7) return false;
+	else return true;
+	//return (c!=1 || solutions[0]!=7);
 }
 
 
@@ -74,12 +80,13 @@ int main(){
 	
 	while(true)
 	{
-		
 		while(c!=8)
 		{
+			
+			
 			if(r>=8)
 			{
-				if(c==1 && solutions[0]==7) break;
+				if(!can_backtrack(solutions, c)) break;
 				backtrack(b,solutions,r,c);
 			}
 		
@@ -94,7 +101,7 @@ int main(){
 				r++;
 			}
 		}
-		if(c==1 && solutions[0]==7) break;
+		if(!can_backtrack(solutions, c)) break;
 		cout << ++count << endl;
 		print(b);
 		
