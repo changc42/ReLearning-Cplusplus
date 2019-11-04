@@ -7,8 +7,8 @@ using namespace std;
 
 class Board{
 	struct Position{
-		int row;
-		int col;
+		int r;
+		int c;
 	};
 	
 	public:
@@ -16,14 +16,14 @@ class Board{
 	int cols;
 	vector<vector<int> > b; 		//board
 	Position pos; 					//current position on board
-	vector<Position> placements; 	//locations of pieces that have been placed
+	vector<int> placements; 	//locations of pieces that have been placed. index is column. value is row
 	int count;						//keeps track of how many solutions found
 	
 	Board(int r, int c){
 		rows=r;
 		cols=c;
-		pos.row=0;
-		pos.col=0;
+		pos.r=0;
+		pos.c=0;
 		for(int i=0; i<r; i++){
 			b.push_back(vector<int>());
 			for(int j=0; j<c; j++){
@@ -33,7 +33,7 @@ class Board{
 		count=0;
 	}
 	
-	bool hasQueens{
+	bool hasQueens(){
 		for(int i=0; cols-i>=0; i++){
 			if(b[pos.r][pos.c-i]==1){
 				return true;
@@ -55,31 +55,31 @@ class Board{
 	
 	void placeQueen(){
 		b[pos.r][pos.c]=1;
-		placements.push_back(pos);
+		placements.push_back(pos.r);
 	}
 	
 	void backtrack(){
 		pos.c--;
-		pos.r = placements[c].r +1;
-		placements.erase(c);
+		pos.r = placements[pos.c] +1;
+		placements.pop_back();
 		if(pos.r==rows) backtrack();
 	}
 	
 	bool canBacktrack(){
-		if(pos.c==2 && placements[0].row==rows-1) return false;
+		if(pos.c==2 && placements[0]==rows-1) return false;
 		else return true;
 	}
 	
 	void nextSol(){
-		while(c!=cols){ //while the board is not filled
-			if(pos.r==rows && canBacktrack){
+		while(pos.c!=cols){ //while the board is not filled
+			if(pos.r==rows && canBacktrack()){
 				backtrack();
-			} else if(!canBacktrack){
+			} else if(!canBacktrack()){
 				break;
-			}else if(!hasQueens){
-				placeQueens();
+			}else if(!hasQueens()){
+				placeQueen();
 				pos.r=0;
-				pos.col++;
+				pos.c++;
 			} else {
 				pos.r++;
 			}
@@ -125,10 +125,12 @@ class Board{
 int main(){
 	
 	Board board(8,8);
+	board.print();
 	while(true){
+		cout<<"test"<<endl;
 		board.nextSol();
-		if(!canBacktrack) break;
-		cout << ++count << endl;
+		if(!board.canBacktrack()) break;
+		cout << ++board.count << endl;
 		board.print();
 	}
 }
