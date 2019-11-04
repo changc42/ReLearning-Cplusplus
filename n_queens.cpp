@@ -87,26 +87,27 @@ class Board{
 	}
 	
 	bool has_queens(int b[][8], int r, int c){
-	for(int i=0; c-i>=0; i++){
-		if(b[r][c-i]==1){
-			return true;
-		}
-		
-		if(r-i>=0){
-			if(b[r-i][c-i]==1){
+		for(int i=0; c-i>=0; i++){
+			if(b[r][c-i]==1){
 				return true;
 			}
-		}
 		
-		if(r+i<8){
-			if(b[r+i][c-i]==1){
-				return true;
+			if(r-i>=0){
+				if(b[r-i][c-i]==1){
+					return true;
+				}
 			}
+		
+			if(r+i<8){
+				if(b[r+i][c-i]==1){
+					return true;
+				}
+			}
+		
+		
 		}
-		
-		
+		return false;
 	}
-	return false;
 	
 	void print(){
 		for(int i=0; i<rows; i++){
