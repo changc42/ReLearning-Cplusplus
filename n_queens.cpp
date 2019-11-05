@@ -101,7 +101,6 @@ class Board{
 int main(){
 	
 	Board board(11);
-	board.print();
 	while(true){
 		board.nextSol();
 		if(!board.canBacktrack()) break;
