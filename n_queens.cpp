@@ -1,5 +1,4 @@
 #include<iostream>
-#include<cstring>
 #include<vector>
 using namespace std;
 
@@ -12,21 +11,19 @@ class Board{
 	};
 	
 	public:
-	int rows;
-	int cols;
+	int size;
 	vector<vector<int> > b; 		//board
 	Position pos; 					//current position on board
 	vector<int> placements; 	//locations of pieces that have been placed. index is column. value is row
 	int count;						//keeps track of how many solutions found
 	
-	Board(int r, int c){
-		rows=r;
-		cols=c;
+	Board(int s){
+		size=s;
 		pos.r=0;
 		pos.c=0;
-		for(int i=0; i<r; i++){
+		for(int i=0; i<s; i++){
 			b.push_back(vector<int>());
-			for(int j=0; j<c; j++){
+			for(int j=0; j<s; j++){
 				b.at(i).push_back(0);
 			}
 		}
@@ -34,7 +31,7 @@ class Board{
 	}
 	
 	bool hasQueens(){
-		for(int i=0; cols-i>=0; i++){
+		for(int i=0; size-i>=0; i++){
 			if(b[pos.r][pos.c-i]==1){
 				return true;
 			}
@@ -45,12 +42,13 @@ class Board{
 				}
 			}
 		
-			if(pos.r+i < 8){
+			if(pos.r+i < size){
 				if(b[pos.r+i][pos.c-i]==1){
 					return true;
 				}
 			}
 		}
+		return false;
 	}
 	
 	void placeQueen(){
@@ -60,21 +58,22 @@ class Board{
 	
 	void backtrack(){
 		pos.c--;
+		b[placements[pos.c]][pos.c]=0;
 		pos.r = placements[pos.c] +1;
 		placements.pop_back();
-		if(pos.r==rows) backtrack();
+		if(pos.r==size) backtrack();
 	}
 	
 	bool canBacktrack(){
-		if(pos.c==2 && placements[0]==rows-1) return false;
+		if(pos.c==1 && placements[0]==size-1) return false;
 		else return true;
 	}
 	
 	void nextSol(){
-		while(pos.c!=cols){ //while the board is not filled
-			if(pos.r==rows && canBacktrack()){
+		while(pos.c!=size){ //while the board is not filled
+			if(pos.r==size && canBacktrack()){
 				backtrack();
-			} else if(!canBacktrack()){
+			} else if(pos.r==size && !canBacktrack()){
 				break;
 			}else if(!hasQueens()){
 				placeQueen();
@@ -83,35 +82,12 @@ class Board{
 			} else {
 				pos.r++;
 			}
-		}	
-	}
-	
-	bool has_queens(int b[][8], int r, int c){
-		for(int i=0; c-i>=0; i++){
-			if(b[r][c-i]==1){
-				return true;
-			}
-		
-			if(r-i>=0){
-				if(b[r-i][c-i]==1){
-					return true;
-				}
-			}
-		
-			if(r+i<8){
-				if(b[r+i][c-i]==1){
-					return true;
-				}
-			}
-		
-		
 		}
-		return false;
 	}
 	
 	void print(){
-		for(int i=0; i<rows; i++){
-			for(int j=0; j<cols; j++){
+		for(int i=0; i<size; i++){
+			for(int j=0; j<size; j++){
 				cout << b[i][j];
 			}
 			cout<<endl;
@@ -124,13 +100,12 @@ class Board{
 
 int main(){
 	
-	Board board(8,8);
+	Board board(11);
 	board.print();
 	while(true){
-		cout<<"test"<<endl;
 		board.nextSol();
 		if(!board.canBacktrack()) break;
 		cout << ++board.count << endl;
-		board.print();
+		board.backtrack();
 	}
 }
