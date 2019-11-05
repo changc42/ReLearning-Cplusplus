@@ -31,7 +31,7 @@ class Board{
 	}
 	
 	bool hasQueens(){
-		for(int i=0; pos.c-i>=0; i++){
+		for(int i=0; size-i>=0; i++){
 			if(b[pos.r][pos.c-i]==1){
 				return true;
 			}
